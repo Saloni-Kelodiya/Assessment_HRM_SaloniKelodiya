@@ -1,0 +1,277 @@
+/* ApprovalPage.css */
+
+.approval-main {
+  padding: 20px;
+  text-align: center;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.approval-content {
+  max-width: 800px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.approved-text {
+  color: #28a745;
+  font-weight: 500;
+}
+
+/* Toggle switch (same as before) */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ffc107; /* Pending = yellow */
+  transition: 0.4s;
+  border-radius: 26px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #28a745; /* Approved = green */
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+/* ApprovalPage.css */
+
+/* Main content */
+.approval-main {
+  padding: 30px 20px;
+  min-height: calc(100vh - 100px - 48px); /* adjust according to header/footer height */
+  display: flex;
+  justify-content: center;
+}
+
+.approval-content {
+  width: 100%;
+  max-width: 1000px;
+  background: #fff;
+  padding: 20px 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Page Title */
+.approval-content h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.6rem;
+  color: #333;
+}
+
+/* Filter Dropdown */
+.filter-container {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-container label {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.filter-container select {
+  padding: 6px 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Table */
+.approval-table-container {
+  overflow-x: auto;
+}
+
+.approval-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.approval-table th,
+.approval-table td {
+  padding: 10px 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.approval-table th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+}
+
+.approval-table tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Toggle Button */
+.toggle-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.3s;
+}
+
+.toggle-btn.pending {
+  background-color: #ffc107;
+  color: #333;
+}
+
+.toggle-btn.approved {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.toggle-btn:hover {
+  opacity: 0.85;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.pagination button {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.pagination button:hover {
+  background-color: #f0f0f0;
+}
+
+.pagination button.active {
+  background-color: #007bff;
+  color: #fff;
+  border-color: #007bff;
+}
+
+.pagination button:disabled {
+  background-color: #eee;
+  cursor: not-allowed;
+  color: #999;
+}
+
+/* AddEmployeePage.css */
+/* ... existing styles ... */
+
+.add-employee-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    padding: 20px;
+    width: 100%; /* Ensure full width */
+    box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.add-employee-box {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    width: 100%;
+    max-width: 500px;
+    text-align: center;
+    color: #2c3e50;
+}
+
+/* ... existing styles for form elements ... */
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .add-employee-box {
+        padding: 25px;
+    }
+    
+    .add-employee-box h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+    
+    .add-emp-btn {
+        max-width: 180px;
+        padding: 12px 20px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .add-employee-box {
+        padding: 20px;
+    }
+    
+    .add-employee-box h2 {
+        font-size: 24px;
+        margin-bottom: 15px;
+        /* prevent heading from wrapping on two lines */
+        white-space: nowrap; 
+    }
+    
+    .add-employee-form input,
+    .add-employee-form label {
+        font-size: 14px;
+    }
+
+    .add-emp-btn {
+        max-width: 150px;
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+}

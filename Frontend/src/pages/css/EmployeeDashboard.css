@@ -1,0 +1,197 @@
+.employee-dashboard-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 80vh;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+/* Main wrapper */
+main {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;
+  padding: 30px 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 90%;
+}
+
+/* Heading */
+h2 {
+  font-weight: 700;
+  font-size: 2.4rem;
+  margin-bottom: 10px;
+  letter-spacing: 0.03em;
+  text-align: center;
+}
+
+.welcome-text {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  color: #666;
+  text-align: center;
+}
+
+/* Search box with icon */
+.search-wrapper {
+  position: relative;
+  max-width: 350px;
+  width: 100%;
+  margin: 0 auto 30px auto;
+}
+
+.search-wrapper input {
+  display: block;
+  width: 100%;
+  padding: 14px 18px 14px 45px;
+  font-size: 1.1rem;
+  border-radius: 10px;
+  border: 2px solid #ccc;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.search-wrapper::before {
+  content: '🔍';
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  color: #777;
+}
+
+.search-wrapper input:focus {
+  border-color: #3f51b5;
+  box-shadow: 0 0 10px rgba(63,81,181,0.3);
+  outline: none;
+}
+
+/* Employee card */
+.employee-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 30px 35px;
+  max-width: 600px;
+  margin: 0 auto;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  animation: fadeIn 0.5s ease-in;
+}
+
+.employee-card:hover {
+  box-shadow: 0 10px 24px rgba(0,0,0,0.16);
+  transform: translateY(-6px);
+}
+
+.employee-card h3 {
+  font-size: 1.6rem;
+  color: #222;
+  margin-bottom: 15px;
+}
+
+.employee-card p {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin: 10px 0;
+  color: #444;
+}
+
+.employee-card strong {
+  color: #3f51b5;
+}
+
+/* Messages */
+.no-employee,
+.loading,
+.error {
+  max-width: 400px;
+  margin: 40px auto;
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 15px 20px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  font-style: italic;
+  color: #666;
+}
+
+.error {
+  color: #d32f2f;
+  font-style: normal;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------------------- */
+/* Responsive Breakpoints */
+/* ---------------------- */
+
+/* Small devices (phones) */
+@media screen and (max-width: 600px) {
+  main {
+    padding: 20px 15px;
+  }
+  h2 {
+    font-size: 1.8rem;
+  }
+  .search-wrapper {
+    max-width: 100%;
+  }
+  .employee-card {
+    padding: 20px;
+    width: 100%;
+  }
+  .employee-card p {
+    font-size: 1rem;
+  }
+}
+
+/* Medium devices (tablets) */
+@media screen and (min-width: 601px) and (max-width: 1024px) {
+  main {
+    padding: 25px;
+  }
+  h2 {
+    font-size: 2rem;
+  }
+  .employee-card {
+    max-width: 90%;
+    padding: 25px;
+  }
+}
+
+/* Large devices (laptops/desktops) */
+@media screen and (min-width: 1025px) and (max-width: 1440px) {
+  main {
+    max-width: 1100px;
+  }
+  .employee-card {
+    max-width: 700px;
+  }
+}
+
+/* Extra-large screens (TVs / 4K) */
+@media screen and (min-width: 1441px) {
+  main {
+    max-width: 1400px;
+  }
+  .employee-card {
+    max-width: 900px;
+    padding: 40px;
+  }
+  h2 {
+    font-size: 2.8rem;
+  }
+  .employee-card p {
+    font-size: 1.25rem;
+  }
+}
