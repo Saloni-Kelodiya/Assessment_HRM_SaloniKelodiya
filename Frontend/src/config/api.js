@@ -1,7 +1,7 @@
 import axios from "axios";  // ✅ must be at the top
 
 // Base URL of your backend (Render deployment)
-const BASE_URL = "https://assessment-hrm-salonikelodiya-1.onrender.com/api";
+const BASE_URL = "https://assessment-hrm-salonikelodiya.onrender.com/api";
 
 // Axios instance
 const api = axios.create({
