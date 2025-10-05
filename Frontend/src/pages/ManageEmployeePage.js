@@ -1,20 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from 'react'
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './css/ManageEmployeePage.css';
 import api from '../config/api';
 const departments = ['HRMS', 'Recruitment', 'Development', 'Account', 'Digital Marketing', 'Sales and Marketing'];
 const ManageEmployeePage = () => {
-    // Removed duplicate departments declaration
-  const [employees, setEmployees] = useState([]);
+   const [employees, setEmployees] = useState([]);
   const [selectedDept, setSelectedDept] = useState('All');
   const [currentPage, setCurrentPage] = useState(1);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [editDept, setEditDept] = useState('');
-  
+  const [loading, setLoading] = useState(false); // ✅ Add this
 
 // Initialize selected value
 useEffect(() => {
