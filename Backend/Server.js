@@ -12,7 +12,7 @@ connectDB();
 
 // Middleware
 const allowedOrigins = [
-  'https://assessment-hrm-salonikelodiya.onrender.com', // your deployed frontend URL
+  'https://assessment-hrm-salonikelodiya-1.onrender.com/', // your deployed frontend URL
   'http://localhost:8000' // optional: for local dev
 ];
 
