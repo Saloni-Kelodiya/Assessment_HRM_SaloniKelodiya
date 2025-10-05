@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './css/AddEmployeePage.css';
+import api from '../config/api';
 
 const AddEmployeePage = () => {
   const [formData, setFormData] = useState({
@@ -71,8 +72,7 @@ const AddEmployeePage = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post(
-        'http://127.0.0.1:8000/api/employee/add',
+      const response = await api.post('/employee/add',
         {
           // Do not send code; backend generates it
           name: formData.name,
@@ -82,9 +82,7 @@ const AddEmployeePage = () => {
           dept: formData.dept,
           proj: formData.proj,
         },
-        {
-          headers: { 'Content-Type': 'application/json' },
-        }
+        
       );
 
       if (response.data.success) {

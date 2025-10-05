@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "./css/EmployeeDashboard.css";
+import api from "../config/api";
 
 const EmployeeDashboard = () => {
   const [employees, setEmployees] = useState([]);
@@ -18,7 +19,7 @@ const EmployeeDashboard = () => {
     const fetchEmployees = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("http://127.0.0.1:8000/api/employee/all");
+        const res = await api.get("/employee/all");
         if (res.data.success) {
           setEmployees(res.data.employees);
           if (res.data.employees.length > 0) {

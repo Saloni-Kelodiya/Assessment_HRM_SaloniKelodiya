@@ -1,20 +1,35 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import api from '../config/api'; // ensure this is imported
 
 function HRDashboard() {
   const [requests, setRequests] = useState([]);
 
-  useEffect(() => {
-    axios.get("http://localhost:5000/api/requests")
-      .then((res) => setRequests(res.data));
-  }, []);
+ useEffect(() => {
+  const fetchRequests = async () => {
+    try {
+      const res = await api.get('/requests'); // no localhost
+      setRequests(res.data);
+    } catch (error) {
+      console.error('Failed to fetch requests:', error);
+    }
+  };
 
-  const updateStatus = async (id, status) => {
-    await axios.put(`http://localhost:5000/api/requests/${id}`, { status });
+  fetchRequests();
+}, []);
+
+
+ const updateStatus = async (id, status) => {
+  try {
+    await api.put(`/requests/${id}`, { status });
     setRequests((prev) =>
       prev.map((r) => (r._id === id ? { ...r, status } : r))
     );
-  };
+  } catch (error) {
+    console.error('Failed to update status:', error);
+    alert('Failed to update request status. Please try again.');
+  }
+};
 
   return (
     <div>

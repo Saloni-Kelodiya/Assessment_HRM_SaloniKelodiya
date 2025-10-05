@@ -6,7 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './css/LoginPage.css';
-
+import api from "../config/api";
 const LoginPage = () => {
     const [loginAs, setLoginAs] = useState(''); // ✅ State define karein
     const [loginId, setLoginId] = useState(''); // ✅ State define karein
@@ -25,7 +25,7 @@ const LoginPage = () => {
 
   try {
     // Send role along with email and password
-    const response = await axios.post('http://127.0.0.1:8000/api/auth/login', {
+    const response = await api.post('/auth/login', {
       email: loginId,
       password: password,
       role: loginAs

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import api from '../config/api'; // make sure api.js is imported
 
 function EmployeeDashboard() {
   const { id } = useParams();
@@ -8,16 +9,22 @@ function EmployeeDashboard() {
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
-    // Fetch employee details
-    axios.get(`http://localhost:5000/api/employees/${id}`)
-      .then((res) => setEmployee(res.data))
-      .catch((err) => console.error(err));
+  const fetchData = async () => {
+    try {
+      // Fetch employee details
+      const empRes = await api.get(`/employees/${id}`);
+      setEmployee(empRes.data);
 
-    // Fetch employee requests
-    axios.get(`http://localhost:5000/api/requests/${id}`)
-      .then((res) => setRequests(res.data))
-      .catch((err) => console.error(err));
-  }, [id]);
+      // Fetch employee requests
+      const reqRes = await api.get(`/requests/${id}`);
+      setRequests(reqRes.data);
+    } catch (err) {
+      console.error('Error fetching employee data or requests:', err);
+    }
+  };
+
+  fetchData();
+}, [id]);
 
   return (
     <div className="container my-4">

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import api from '../config/api'; // ensure this is imported
 
 function RequestForm() {
   const { id } = useParams();
@@ -9,14 +10,19 @@ function RequestForm() {
   const [description, setDescription] = useState("");
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    await axios.post("http://localhost:5000/api/requests", {
+  e.preventDefault();
+  try {
+    await api.post('/requests', {
       employeeId: id,
       type,
       description,
     });
     navigate(`/employee/${id}`);
-  };
+  } catch (error) {
+    console.error('Failed to submit request:', error);
+    alert('Failed to submit request. Please try again.');
+  }
+};
 
   return (
     <div>

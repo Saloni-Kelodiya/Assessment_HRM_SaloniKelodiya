@@ -1,42 +1,41 @@
-// Environment variables load karna (local dev ke liye)
-if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config();
-}
+// Load environment variables at the very top
+require('dotenv').config();
 
 const express = require('express');
-const connectDB = require('./config/db');  // MongoDB connection logic yahan define hai
+const connectDB = require('./config/db');
 const cors = require('cors');
-const path = require('path');
 
-// Express app initialize
 const app = express();
 
-// MongoDB connect karein (MONGO_URI .env se)
+// Connect Database (MONGO_URI from .env)
 connectDB();
 
-// Middleware setup
-app.use(cors());             // CORS enable
-app.use(express.json());     // JSON body parser
+// Middleware
+const allowedOrigins = [
+  'https://assessment-hrm-salonikelodiya.onrender.com', // your deployed frontend URL
+  'http://localhost:8000' // optional: for local dev
+];
 
-// Health check / root route
-app.get('/', (req, res) => {
-    res.send('API is running successfully!');
-});
+app.use(cors({
+  origin: function(origin, callback){
+    // allow requests with no origin like mobile apps or curl
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true
+}));
 
-// API route imports
+app.use(express.json());
+
+// Routes
+app.get('/', (req, res) => res.send('API is running successfully!'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/employee', require('./routes/employee'));
 
-// Production mode mein React frontend serve karna
-if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '../Frontend/build')));
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, '../Frontend', 'build', 'index.html'));
-    });
-}
-
-
-// Server port setup (Render environment variable ya default 8000)
+// Start Server
 const PORT = process.env.PORT || 8000;
-
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

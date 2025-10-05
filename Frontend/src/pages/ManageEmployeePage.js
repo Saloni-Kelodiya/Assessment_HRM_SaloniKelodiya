@@ -3,6 +3,7 @@ import axios from 'axios';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import './css/ManageEmployeePage.css';
+import api from '../config/api';
 const departments = ['HRMS', 'Recruitment', 'Development', 'Account', 'Digital Marketing', 'Sales and Marketing'];
 const ManageEmployeePage = () => {
     // Removed duplicate departments declaration
@@ -27,17 +28,27 @@ useEffect(() => {
   useEffect(() => {
   const fetchEmployees = async () => {
     try {
-      const res = await axios.get('http://127.0.0.1:8000/api/employee/all');
-      console.log('Employees response:', res.data); // Debug print
+      setLoading(true); // optional: show loading
+      const res = await api.get('/employee/all'); // ✅ leading slash
+      console.log('Employees response:', res.data); // Debug
       if (res.data.success) {
         setEmployees(res.data.employees);
+        if (res.data.employees.length > 0) {
+          setSelectedEmployee(res.data.employees[0]);
+        }
+      } else {
+        console.error('Failed to fetch employees:', res.data.message);
       }
     } catch (error) {
       console.error('Failed to fetch employees:', error);
+    } finally {
+      setLoading(false);
     }
   };
+
   fetchEmployees();
 }, []);
+
 
   const filteredEmployees =
     selectedDept === 'All'
