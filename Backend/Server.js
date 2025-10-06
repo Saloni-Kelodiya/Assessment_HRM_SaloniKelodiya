@@ -21,7 +21,7 @@ app.use(cors({
     return callback(new Error('Not allowed by CORS'));
   },
   credentials: true,
- methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'], // ✅ include PATCH
+  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'], // ✅ add PATCH
 }));
 
 // Body parser
