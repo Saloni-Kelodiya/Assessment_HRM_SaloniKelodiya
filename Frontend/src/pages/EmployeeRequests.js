@@ -1,25 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import "./css/EmployeeRequests.css"
-
+import api from "../config/api"; // Your axios instance
+import "./css/EmployeeRequests.css";
 
 const EmployeeRequests = () => {
-  const [requests, setRequests] = useState([
-    { id: 1, type: "Leave", reason: "Medical Leave", status: "Approved" },
-    { id: 2, type: "Project Change", reason: "Want to switch project", status: "Disapproved" },
-  ]);
-
+  const [requests, setRequests] = useState([]);
   const [newRequest, setNewRequest] = useState({ type: "Leave", reason: "" });
 
-  const handleSubmit = (e) => {
+  // Fetch existing requests on component mount
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const response = await api.get('/requests');
+        setRequests(response.data);
+      } catch (error) {
+        console.error('Error fetching requests:', error);
+      }
+    };
+    fetchRequests();
+  }, []);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!newRequest.reason.trim()) return;
-    setRequests([
-      ...requests,
-      { id: Date.now(), ...newRequest, status: "Pending" }
-    ]);
-    setNewRequest({ type: "Leave", reason: "" });
+
+    try {
+      const response = await api.post('/requests', newRequest);
+      setRequests([response.data, ...requests]);
+      setNewRequest({ type: "Leave", reason: "" });
+    } catch (error) {
+      console.error('Error submitting request:', error);
+    }
   };
 
   return (
@@ -50,7 +62,7 @@ const EmployeeRequests = () => {
         <h3 style={{ marginTop: "30px" }}>📌 Your Requests</h3>
         <ul className="request-list">
           {requests.map((req) => (
-            <li key={req.id} className={`request-item ${req.status.toLowerCase()}`}>
+            <li key={req._id} className={`request-item ${req.status.toLowerCase()}`}>
               <strong>{req.type}:</strong> {req.reason}  
               <span className="status">[{req.status}]</span>
             </li>

@@ -34,7 +34,8 @@ const ImageCarousel = () => {
   return (
     <div className="image-carousel">
       <div className="carousel-container">
-        <div 
+        
+       <div 
           className="carousel-track"
           style={{ transform: `translateX(-${currentSlide * 100}%)` }}
         >
@@ -57,7 +58,7 @@ const ImageCarousel = () => {
             </div>
           ))}
         </div>
-        
+         
         {/* <button className="carousel-btn prev" onClick={prevSlide}>
           <i className="fas fa-chevron-left"></i>
         </button>

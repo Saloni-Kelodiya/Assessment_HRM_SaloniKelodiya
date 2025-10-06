@@ -20,8 +20,7 @@
   width: 100%;
   box-sizing: border-box;
   /* max-height: 70vh; */
- height: calc(100vh - 100px - 48px);
-
+ height: calc(100vh - 15vh - 8vh);
  overflow-y: auto;
 
 }

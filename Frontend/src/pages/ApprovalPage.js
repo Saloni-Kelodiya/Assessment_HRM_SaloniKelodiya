@@ -1,25 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import api from '../config/api';
 import './css/ApprovalPage.css';
 
 const ApprovalPage = () => {
   const [statusFilter, setStatusFilter] = useState('Pending');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+  const [requests, setRequests] = useState([]);
 
-  // Dummy approval requests
-  const [dummyRequests, setDummyRequests] = useState([
-    { sr: 1, empName: 'Ashish Sharma', request: 'Leave A', status: 'Pending' },
-    { sr: 2, empName: 'Priya Singh', request: 'Leave B', status: 'Approved' },
-    { sr: 3, empName: 'Rahul Jain', request: 'Leave C', status: 'Pending' },
-    { sr: 4, empName: 'Anjali Gupta', request: 'Leave D', status: 'Approved' },
-    { sr: 5, empName: 'Vikram Yadav', request: 'Leave E', status: 'Pending' },
-  ]);
+  useEffect(() => {
+    const fetchRequests = async () => {
+      try {
+        const response = await api.get('/requests');
+        setRequests(response.data);
+      } catch (error) {
+        console.error('Error fetching requests:', error);
+      }
+    };
+    fetchRequests();
+  }, []);
 
   const filteredRequests = statusFilter === 'All'
-    ? dummyRequests
-    : dummyRequests.filter(req => req.status === statusFilter);
+    ? requests
+    : requests.filter(req => req.status === statusFilter);
 
   const totalPages = Math.ceil(filteredRequests.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -27,15 +32,15 @@ const ApprovalPage = () => {
 
   const getFirstName = (fullName) => fullName.split(" ")[0];
 
-  // Toggle Pending -> Approved
-  const handleToggleStatus = (sr) => {
-    const updatedRequests = dummyRequests.map(req => {
-      if (req.sr === sr && req.status === 'Pending') {
-        return { ...req, status: 'Approved' };
-      }
-      return req;
-    });
-    setDummyRequests(updatedRequests);
+  const handleToggleStatus = async (id) => {
+    try {
+      await api.patch(`/requests/${id}`, { status: 'Approved' });
+      setRequests(requests.map(req => 
+        req._id === id ? { ...req, status: 'Approved' } : req
+      ));
+    } catch (error) {
+      console.error('Error updating request status:', error);
+    }
   };
 
   return (
@@ -45,7 +50,6 @@ const ApprovalPage = () => {
         <div className="approval-content">
           <h2>Approval Requests</h2>
 
-          {/* Status Filter */}
           <div className="filter-container">
             <label htmlFor="status-select">Select Status</label>
             <select
@@ -58,7 +62,6 @@ const ApprovalPage = () => {
             </select>
           </div>
 
-          {/* Approval Table */}
           <div className="approval-table-container">
             <table className="approval-table">
               <thead>
@@ -70,17 +73,17 @@ const ApprovalPage = () => {
                 </tr>
               </thead>
               <tbody>
-                {paginatedRequests.map(req => (
-                  <tr key={req.sr}>
-                    <td>{req.sr}</td>
-                    <td>{getFirstName(req.empName)}</td>
-                    <td>{req.request}</td>
+                {paginatedRequests.map((req, index) => (
+                  <tr key={req._id}>
+                    <td>{startIndex + index + 1}</td>
+                    <td>{getFirstName(req.type)}</td>
+                    <td>{req.reason}</td>
                     <td>
                       {req.status === 'Pending' ? (
                         <label className="switch">
                           <input
                             type="checkbox"
-                            onChange={() => handleToggleStatus(req.sr)}
+                            onChange={() => handleToggleStatus(req._id)}
                           />
                           <span className="slider round"></span>
                         </label>
@@ -94,7 +97,6 @@ const ApprovalPage = () => {
             </table>
           </div>
 
-          {/* Pagination */}
           <div className="pagination">
             <button 
               disabled={currentPage === 1} 
@@ -120,7 +122,6 @@ const ApprovalPage = () => {
               &gt;
             </button>
           </div>
-
         </div>
       </main>
       <Footer />
