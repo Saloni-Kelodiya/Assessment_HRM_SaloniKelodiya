@@ -37,7 +37,7 @@ const ApprovalPage = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedRequests = filteredRequests.slice(startIndex, startIndex + itemsPerPage);
 
-  // Approve request in DB
+  // Toggle approval status
   const handleToggleStatus = async (id, checked) => {
     const newStatus = checked ? 'Approved' : 'Pending';
     try {
