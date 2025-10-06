@@ -38,18 +38,18 @@ const ApprovalPage = () => {
   const paginatedRequests = filteredRequests.slice(startIndex, startIndex + itemsPerPage);
 
   // Toggle approval status
-  const handleToggleStatus = async (id, checked) => {
-    const newStatus = checked ? 'Approved' : 'Pending';
-    try {
-      const response = await api.patch(`/requests/${id}`, { status: newStatus });
-      setRequests(requests.map(req =>
-        req._id === id ? { ...req, status: response.data.status } : req
-      ));
-    } catch (error) {
-      console.error('Error updating request status:', error);
-      alert('Failed to update request status.');
-    }
-  };
+ const handleToggleStatus = async (id) => {
+  try {
+    const response = await api.patch(`/requests/${id}`, { status: 'Approved' });
+    setRequests(requests.map(req =>
+      req._id === id ? { ...req, status: response.data.status } : req
+    ));
+  } catch (error) {
+    console.error('Error updating request status:', error);
+    alert('Failed to approve request.');
+  }
+};
+
 
   return (
     <div className="container">
@@ -91,18 +91,18 @@ const ApprovalPage = () => {
                     <td>{startIndex + index + 1}</td>
                     <td>{req.type}</td>
                     <td>{req.reason}</td>
-                    <td>
-                      <label className="switch">
-                        <input
-                          type="checkbox"
-                          checked={req.status === 'Approved'}
-                          disabled={req.status === 'Approved'}
-                          onChange={(e) => handleToggleStatus(req._id, e.target.checked)}
-                        />
-                        <span className="slider round"></span>
-                      </label>
-                      {req.status === 'Approved' && <span className="approved-text"> Approved ✅</span>}
-                    </td>
+                   <td>
+  <label className="switch">
+    <input
+      type="checkbox"
+      checked={req.status === 'Approved'}
+      disabled={req.status === 'Approved'}
+      onChange={() => handleToggleStatus(req._id)}
+    />
+    <span className="slider round"></span>
+  </label>
+</td>
+
                   </tr>
                 ))}
               </tbody>
