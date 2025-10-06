@@ -11,16 +11,16 @@ const ApprovalPage = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Fetch all requests on mount
+  // Fetch requests from DB
   useEffect(() => {
     const fetchRequests = async () => {
       setLoading(true);
       try {
-        const response = await api.get('/requests'); // GET all requests
+        const response = await api.get('/requests'); // fetch from backend
         setRequests(response.data);
       } catch (error) {
         console.error('Error fetching requests:', error);
-        alert('Failed to fetch requests from server.');
+        alert('Failed to fetch requests.');
       } finally {
         setLoading(false);
       }
@@ -28,7 +28,7 @@ const ApprovalPage = () => {
     fetchRequests();
   }, []);
 
-  // Filter and paginate requests
+  // Filter and paginate
   const filteredRequests = statusFilter === 'All'
     ? requests
     : requests.filter(req => req.status === statusFilter);
@@ -37,19 +37,17 @@ const ApprovalPage = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedRequests = filteredRequests.slice(startIndex, startIndex + itemsPerPage);
 
-  // Extract first name or type for display
-  const getFirstName = (fullName) => fullName.split(" ")[0];
-
-  // Approve a request
+  // Approve request in DB
   const handleToggleStatus = async (id) => {
     try {
-      const response = await api.patch(`/requests/${id}`, { status: 'Approved' });
+      const response = await api.patch(`/requests/${id}`, { status: 'Approved' }); // update in DB
+      // Update frontend state
       setRequests(requests.map(req =>
         req._id === id ? { ...req, status: response.data.status } : req
       ));
     } catch (error) {
       console.error('Error updating request status:', error);
-      alert('Failed to update request status.');
+      alert('Failed to approve request.');
     }
   };
 
@@ -78,40 +76,37 @@ const ApprovalPage = () => {
           ) : paginatedRequests.length === 0 ? (
             <p>No requests found.</p>
           ) : (
-            <div className="approval-table-container">
-              <table className="approval-table">
-                <thead>
-                  <tr>
-                    <th>Sr.</th>
-                    <th>Request Type</th>
-                    <th>Reason</th>
-                    <th>Action</th>
+            <table className="approval-table">
+              <thead>
+                <tr>
+                  <th>Sr.</th>
+                  <th>Request Type</th>
+                  <th>Reason</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedRequests.map((req, index) => (
+                  <tr key={req._id}>
+                    <td>{startIndex + index + 1}</td>
+                    <td>{req.type}</td>
+                    <td>{req.reason}</td>
+                    <td>
+                      {req.status === 'Pending' ? (
+                        <button 
+                          className="approve-btn" 
+                          onClick={() => handleToggleStatus(req._id)}
+                        >
+                          Approve ✅
+                        </button>
+                      ) : (
+                        <span className="approved-text">{req.status} ✅</span>
+                      )}
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {paginatedRequests.map((req, index) => (
-                    <tr key={req._id}>
-                      <td>{startIndex + index + 1}</td>
-                      <td>{getFirstName(req.type)}</td>
-                      <td>{req.reason}</td>
-                      <td>
-                        {req.status === 'Pending' ? (
-                          <label className="switch">
-                            <input
-                              type="checkbox"
-                              onChange={() => handleToggleStatus(req._id)}
-                            />
-                            <span className="slider round"></span>
-                          </label>
-                        ) : (
-                          <span className="approved-text">Approved ✅</span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                ))}
+              </tbody>
+            </table>
           )}
 
           {/* Pagination */}
