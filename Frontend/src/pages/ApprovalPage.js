@@ -38,17 +38,19 @@ const ApprovalPage = () => {
   const paginatedRequests = filteredRequests.slice(startIndex, startIndex + itemsPerPage);
 
   // Toggle approval status
- const handleToggleStatus = async (id) => {
+ const handleToggleStatus = async (id, currentStatus) => {
   try {
-    const response = await api.patch(`/requests/${id}`, { status: 'Approved' });
+    const newStatus = currentStatus === 'Pending' ? 'Approved' : 'Pending';
+    const response = await api.patch(`/requests/${id}`, { status: newStatus });
     setRequests(requests.map(req =>
       req._id === id ? { ...req, status: response.data.status } : req
     ));
   } catch (error) {
     console.error('Error updating request status:', error);
-    alert('Failed to approve request.');
+    alert('Failed to update request status.');
   }
 };
+
 
 
   return (
@@ -94,11 +96,11 @@ const ApprovalPage = () => {
                    <td>
   <label className="switch">
     <input
-      type="checkbox"
-      checked={req.status === 'Approved'}
-      disabled={req.status === 'Approved'}
-      onChange={() => handleToggleStatus(req._id)}
-    />
+  type="checkbox"
+  checked={req.status === 'Approved'}
+  onChange={() => handleToggleStatus(req._id, req.status)}
+/>
+
     <span className="slider round"></span>
   </label>
 </td>
