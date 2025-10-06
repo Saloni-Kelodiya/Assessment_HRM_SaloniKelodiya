@@ -3,17 +3,17 @@ const Request = require('../models/Request');
 const router = express.Router();
 
 // Get all requests
-router.get('/', async (req, res) => {
+router.get('/requests', async (req, res) => {
   try {
     const requests = await Request.find().sort({ createdAt: -1 });
-    res.status(200).json(requests);
+    res.json(requests);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
 // Create new request
-router.post('/', async (req, res) => {
+router.post('/requests', async (req, res) => {
   const request = new Request({
     type: req.body.type,
     reason: req.body.reason,
@@ -25,6 +25,20 @@ router.post('/', async (req, res) => {
     res.status(201).json(newRequest);
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+});
+
+// ✅ Update request status
+router.patch('/requests/:id', async (req, res) => {
+  try {
+    const request = await Request.findById(req.params.id);
+    if (!request) return res.status(404).json({ message: 'Request not found' });
+
+    request.status = req.body.status; // 'Approved' or 'Disapproved'
+    const updatedRequest = await request.save();
+    res.json(updatedRequest);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
 
