@@ -1,4 +1,4 @@
-// Load environment variables at the very top
+// Load environment variables
 require('dotenv').config();
 
 const express = require('express');
@@ -24,7 +24,7 @@ app.use(cors({
     return callback(new Error('Not allowed by CORS'));
   },
   credentials: true, // needed for cookies
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
 }));
 
 // Preflight support
@@ -36,6 +36,9 @@ app.use(express.json());
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/employee', require('./routes/employee'));
+
+// Mount requests routes properly
+app.use('/api/requests', require('./routes/requests')); // ✅ now /api/requests works
 
 // Root
 app.get('/', (req, res) => res.send('API is running successfully!'));
