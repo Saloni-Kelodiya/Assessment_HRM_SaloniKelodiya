@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import api from "../config/api"; // Axios instance
+import api from "../config/api"; // Axios instance with baseURL
 import "./css/EmployeeRequests.css";
 
 const EmployeeRequests = () => {
@@ -9,15 +9,16 @@ const EmployeeRequests = () => {
   const [newRequest, setNewRequest] = useState({ type: "Leave", reason: "" });
   const [loading, setLoading] = useState(false);
 
-  // Fetch existing requests on mount
+  // Fetch requests on mount
   useEffect(() => {
     const fetchRequests = async () => {
       setLoading(true);
       try {
-        const response = await api.get("/requests");
+        const response = await api.get("/requests"); // calls https://.../api/requests
         setRequests(response.data);
       } catch (error) {
         console.error("Error fetching requests:", error);
+        alert("Failed to fetch requests. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -25,24 +26,33 @@ const EmployeeRequests = () => {
     fetchRequests();
   }, []);
 
-  // Handle submitting a new request
+  // Submit new request
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!newRequest.reason.trim()) {
       alert("Please enter a reason for the request.");
       return;
     }
 
     try {
-      const response = await api.post("/requests", newRequest);
-      // Add new request at the top
-      setRequests([response.data, ...requests]);
-      // Reset form
-      setNewRequest({ type: "Leave", reason: "" });
+      const response = await api.post("/requests", newRequest); // POST to backend
+      setRequests([response.data, ...requests]); // add new request at top
+      setNewRequest({ type: "Leave", reason: "" }); // reset form
     } catch (error) {
       console.error("Error submitting request:", error);
       alert("Failed to submit request. Please try again.");
+    }
+  };
+
+  // Utility to get CSS class for status
+  const getStatusClass = (status) => {
+    switch (status) {
+      case "Approved":
+        return "approved";
+      case "Disapproved":
+        return "disapproved";
+      default:
+        return "pending";
     }
   };
 
@@ -74,6 +84,7 @@ const EmployeeRequests = () => {
         </form>
 
         <h3 style={{ marginTop: "30px" }}>📌 Your Requests</h3>
+
         {loading ? (
           <p>Loading requests...</p>
         ) : requests.length === 0 ? (
@@ -81,7 +92,7 @@ const EmployeeRequests = () => {
         ) : (
           <ul className="request-list">
             {requests.map((req) => (
-              <li key={req._id} className={`request-item ${req.status.toLowerCase()}`}>
+              <li key={req._id} className={`request-item ${getStatusClass(req.status)}`}>
                 <strong>{req.type}:</strong> {req.reason}  
                 <span className="status">[{req.status}]</span>
               </li>

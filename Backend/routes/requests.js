@@ -1,19 +1,19 @@
 const express = require('express');
-const Request = require('../models/Request'); // your Mongoose model
+const Request = require('../models/Request');
 const router = express.Router();
 
 // Get all requests
-router.get('/requests', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const requests = await Request.find().sort({ createdAt: -1 });
-    res.json(requests);
+    res.status(200).json(requests);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
 // Create new request
-router.post('/requests', async (req, res) => {
+router.post('/', async (req, res) => {
   const request = new Request({
     type: req.body.type,
     reason: req.body.reason,
