@@ -7,10 +7,10 @@ const cors = require('cors');
 
 const app = express();
 
-// Connect Database (MONGO_URI from .env)
+// Connect Database
 connectDB();
 
-// Allowed origins for CORS
+// Allowed origins
 const allowedOrigins = [
   'https://assessment-hrm-salonikelodiya-1.onrender.com', // deployed frontend
   'http://localhost:3000' // local frontend
@@ -19,30 +19,27 @@ const allowedOrigins = [
 // CORS middleware
 app.use(cors({
   origin: function(origin, callback) {
-    // allow requests with no origin (mobile apps, curl)
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    } else {
-      return callback(new Error('Not allowed by CORS'));
-    }
+    if (!origin) return callback(null, true); // allow mobile apps, curl
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error('Not allowed by CORS'));
   },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // allow these HTTP methods
+  credentials: true, // needed for cookies
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
 }));
 
-// Enable preflight requests for all routes
+// Preflight support
 app.options('*', cors());
 
-// Parse incoming JSON requests
+// Body parser
 app.use(express.json());
 
 // Routes
-app.get('/', (req, res) => res.send('API is running successfully!'));
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/employee', require('./routes/employee'));
 
-// Start Server
+// Root
+app.get('/', (req, res) => res.send('API is running successfully!'));
+
+// Start server
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
