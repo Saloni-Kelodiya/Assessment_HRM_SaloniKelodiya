@@ -1,6 +1,5 @@
-// routes/requests.js
 const express = require('express');
-const Request = require('../models/Request');
+const Request = require('../models/Request'); // your Mongoose model
 const router = express.Router();
 
 // Get all requests
@@ -24,20 +23,6 @@ router.post('/requests', async (req, res) => {
   try {
     const newRequest = await request.save();
     res.status(201).json(newRequest);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-});
-
-// Update request status
-router.patch('/requests/:id', async (req, res) => {
-  try {
-    const request = await Request.findById(req.params.id);
-    if (!request) return res.status(404).json({ message: 'Request not found' });
-
-    request.status = req.body.status;
-    const updatedRequest = await request.save();
-    res.json(updatedRequest);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
