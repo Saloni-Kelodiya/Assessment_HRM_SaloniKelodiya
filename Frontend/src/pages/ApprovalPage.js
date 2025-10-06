@@ -9,19 +9,26 @@ const ApprovalPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
   const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(false);
 
+  // Fetch all requests on mount
   useEffect(() => {
     const fetchRequests = async () => {
+      setLoading(true);
       try {
-        const response = await api.get('/requests');
+        const response = await api.get('/requests'); // GET all requests
         setRequests(response.data);
       } catch (error) {
         console.error('Error fetching requests:', error);
+        alert('Failed to fetch requests from server.');
+      } finally {
+        setLoading(false);
       }
     };
     fetchRequests();
   }, []);
 
+  // Filter and paginate requests
   const filteredRequests = statusFilter === 'All'
     ? requests
     : requests.filter(req => req.status === statusFilter);
@@ -30,16 +37,19 @@ const ApprovalPage = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedRequests = filteredRequests.slice(startIndex, startIndex + itemsPerPage);
 
+  // Extract first name or type for display
   const getFirstName = (fullName) => fullName.split(" ")[0];
 
+  // Approve a request
   const handleToggleStatus = async (id) => {
     try {
-      await api.patch(`/requests/${id}`, { status: 'Approved' });
-      setRequests(requests.map(req => 
-        req._id === id ? { ...req, status: 'Approved' } : req
+      const response = await api.patch(`/requests/${id}`, { status: 'Approved' });
+      setRequests(requests.map(req =>
+        req._id === id ? { ...req, status: response.data.status } : req
       ));
     } catch (error) {
       console.error('Error updating request status:', error);
+      alert('Failed to update request status.');
     }
   };
 
@@ -59,69 +69,79 @@ const ApprovalPage = () => {
             >
               <option value="Pending">Pending</option>
               <option value="Approved">Approved</option>
+              <option value="All">All</option>
             </select>
           </div>
 
-          <div className="approval-table-container">
-            <table className="approval-table">
-              <thead>
-                <tr>
-                  <th>Sr.</th>
-                  <th>Emp Name</th>
-                  <th>Request Name</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedRequests.map((req, index) => (
-                  <tr key={req._id}>
-                    <td>{startIndex + index + 1}</td>
-                    <td>{getFirstName(req.type)}</td>
-                    <td>{req.reason}</td>
-                    <td>
-                      {req.status === 'Pending' ? (
-                        <label className="switch">
-                          <input
-                            type="checkbox"
-                            onChange={() => handleToggleStatus(req._id)}
-                          />
-                          <span className="slider round"></span>
-                        </label>
-                      ) : (
-                        <span className="approved-text">Approved ✅</span>
-                      )}
-                    </td>
+          {loading ? (
+            <p>Loading requests...</p>
+          ) : paginatedRequests.length === 0 ? (
+            <p>No requests found.</p>
+          ) : (
+            <div className="approval-table-container">
+              <table className="approval-table">
+                <thead>
+                  <tr>
+                    <th>Sr.</th>
+                    <th>Request Type</th>
+                    <th>Reason</th>
+                    <th>Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody>
+                  {paginatedRequests.map((req, index) => (
+                    <tr key={req._id}>
+                      <td>{startIndex + index + 1}</td>
+                      <td>{getFirstName(req.type)}</td>
+                      <td>{req.reason}</td>
+                      <td>
+                        {req.status === 'Pending' ? (
+                          <label className="switch">
+                            <input
+                              type="checkbox"
+                              onChange={() => handleToggleStatus(req._id)}
+                            />
+                            <span className="slider round"></span>
+                          </label>
+                        ) : (
+                          <span className="approved-text">Approved ✅</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
 
-          <div className="pagination">
-            <button 
-              disabled={currentPage === 1} 
-              onClick={() => setCurrentPage(prev => prev - 1)}
-            >
-              &lt;
-            </button>
-
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
-              <button
-                key={num}
-                className={currentPage === num ? "active" : ""}
-                onClick={() => setCurrentPage(num)}
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="pagination">
+              <button 
+                disabled={currentPage === 1} 
+                onClick={() => setCurrentPage(prev => prev - 1)}
               >
-                {num}
+                &lt;
               </button>
-            ))}
 
-            <button 
-              disabled={currentPage === totalPages} 
-              onClick={() => setCurrentPage(prev => prev + 1)}
-            >
-              &gt;
-            </button>
-          </div>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(num => (
+                <button
+                  key={num}
+                  className={currentPage === num ? "active" : ""}
+                  onClick={() => setCurrentPage(num)}
+                >
+                  {num}
+                </button>
+              ))}
+
+              <button 
+                disabled={currentPage === totalPages} 
+                onClick={() => setCurrentPage(prev => prev + 1)}
+              >
+                &gt;
+              </button>
+            </div>
+          )}
         </div>
       </main>
       <Footer />
