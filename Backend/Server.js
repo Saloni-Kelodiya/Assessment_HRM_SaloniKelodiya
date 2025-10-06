@@ -10,25 +10,32 @@ const app = express();
 // Connect Database (MONGO_URI from .env)
 connectDB();
 
-// Middleware
+// Allowed origins for CORS
 const allowedOrigins = [
-  'https://assessment-hrm-salonikelodiya-1.onrender.com', // your deployed frontend URL
-  'http://localhost:3000' // optional: for local dev
+  'https://assessment-hrm-salonikelodiya-1.onrender.com', // deployed frontend
+  'http://localhost:3000' // local frontend
 ];
 
+// CORS middleware
 app.use(cors({
-  origin: function(origin, callback){
-    // allow requests with no origin like mobile apps or curl
-    if(!origin) return callback(null, true);
-    if(allowedOrigins.indexOf(origin) === -1){
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
+  origin: function(origin, callback) {
+    // allow requests with no origin (mobile apps, curl)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
     }
-    return callback(null, true);
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // allow these HTTP methods
 }));
 
+// Enable preflight requests for all routes
+app.options('*', cors());
+
+// Parse incoming JSON requests
 app.use(express.json());
 
 // Routes
