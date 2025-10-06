@@ -16,7 +16,7 @@ const ApprovalPage = () => {
     const fetchRequests = async () => {
       setLoading(true);
       try {
-        const response = await api.get('/requests'); // fetch from backend
+        const response = await api.get('/requests');
         setRequests(response.data);
       } catch (error) {
         console.error('Error fetching requests:', error);
@@ -38,16 +38,16 @@ const ApprovalPage = () => {
   const paginatedRequests = filteredRequests.slice(startIndex, startIndex + itemsPerPage);
 
   // Approve request in DB
-  const handleToggleStatus = async (id) => {
+  const handleToggleStatus = async (id, checked) => {
+    const newStatus = checked ? 'Approved' : 'Pending';
     try {
-      const response = await api.patch(`/requests/${id}`, { status: 'Approved' }); // update in DB
-      // Update frontend state
+      const response = await api.patch(`/requests/${id}`, { status: newStatus });
       setRequests(requests.map(req =>
         req._id === id ? { ...req, status: response.data.status } : req
       ));
     } catch (error) {
       console.error('Error updating request status:', error);
-      alert('Failed to approve request.');
+      alert('Failed to update request status.');
     }
   };
 
@@ -59,7 +59,7 @@ const ApprovalPage = () => {
           <h2>Approval Requests</h2>
 
           <div className="filter-container">
-            <label htmlFor="status-select">Select Status</label>
+            <label htmlFor="status-select">Filter by Status:</label>
             <select
               id="status-select"
               value={statusFilter}
@@ -82,7 +82,7 @@ const ApprovalPage = () => {
                   <th>Sr.</th>
                   <th>Request Type</th>
                   <th>Reason</th>
-                  <th>Action</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -92,16 +92,16 @@ const ApprovalPage = () => {
                     <td>{req.type}</td>
                     <td>{req.reason}</td>
                     <td>
-                      {req.status === 'Pending' ? (
-                        <button 
-                          className="approve-btn" 
-                          onClick={() => handleToggleStatus(req._id)}
-                        >
-                          Approve ✅
-                        </button>
-                      ) : (
-                        <span className="approved-text">{req.status} ✅</span>
-                      )}
+                      <label className="switch">
+                        <input
+                          type="checkbox"
+                          checked={req.status === 'Approved'}
+                          disabled={req.status === 'Approved'}
+                          onChange={(e) => handleToggleStatus(req._id, e.target.checked)}
+                        />
+                        <span className="slider round"></span>
+                      </label>
+                      {req.status === 'Approved' && <span className="approved-text"> Approved ✅</span>}
                     </td>
                   </tr>
                 ))}
