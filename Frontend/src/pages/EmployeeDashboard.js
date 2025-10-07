@@ -65,7 +65,7 @@ const EmployeeDashboard = () => {
         <div className="search-wrapper">
           <input
             type="text"
-            placeholder=" Search by Employee Code"
+            placeholder="OS2510001 exp."
             value={searchCode}
             onChange={handleSearchChange}
           />
