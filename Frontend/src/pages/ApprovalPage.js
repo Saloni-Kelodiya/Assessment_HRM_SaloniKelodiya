@@ -97,6 +97,7 @@ const ApprovalPage = () => {
   <label className="switch">
     <input
   type="checkbox"
+  size='small'
   checked={req.status === 'Approved'}
   onChange={() => handleToggleStatus(req._id, req.status)}
 />

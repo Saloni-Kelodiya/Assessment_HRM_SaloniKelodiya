@@ -1,20 +1,21 @@
+
 /* ImageCarousel.css */
 
 .image-carousel {
+  position: relative;
+  margin: 0 auto;
   max-width: 100%;
-  height: auto;
   border-radius: 15px;
   box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
- 
 }
 
 .carousel-container {
- position: relative;
+  position: relative;
   width: 100%;
-  /* Maintain aspect ratio instead of fixed height */
-   aspect-ratio: 16 / 9; /* adjusts automatically based on width   */
-  border-radius: 15px;
+  height: 400px;
   overflow: hidden;
+  border-radius: 15px;
+
 }
 
 .carousel-track {
