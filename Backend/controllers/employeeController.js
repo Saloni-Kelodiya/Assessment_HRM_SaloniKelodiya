@@ -32,7 +32,6 @@ exports.addEmployee = async (req, res) => {
     const mm = String(now.getMonth() + 1).padStart(2, '0');
     const prefix = `OS${yy}${mm}`;
 
-    // DB me last employee with current month prefix dhundhein
     const lastEmployee = await Employee.findOne({ code: { $regex: `^${prefix}` } })
       .sort({ code: -1 })
       .exec();
@@ -41,7 +40,8 @@ exports.addEmployee = async (req, res) => {
 
     const employeeData = {
       ...req.body,
-      code: newCode, // Backend se generated code override karta hai
+      code: newCode,
+      role: 'Employee', // <-- Add role here
     };
 
     const employee = new Employee(employeeData);
@@ -52,3 +52,4 @@ exports.addEmployee = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+

@@ -8,6 +8,7 @@ const employeeSchema = new mongoose.Schema({
   doj: String,
   dept: String,
   proj: String,
+  role: { type: String, default: 'Employee' } // Add role field
 });
 
 module.exports = mongoose.model('Employee', employeeSchema);
