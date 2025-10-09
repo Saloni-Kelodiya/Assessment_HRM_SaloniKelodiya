@@ -59,7 +59,7 @@ const EmployeeRequests = () => {
   return (
     <div className="employee-dashboard-container">
       <Header />
-      <main className="employee-requests-main">
+      <main className="main-content">
         <h2>📝 Raise a Request</h2>
         <p className="welcome-text">Submit a leave or project change request.</p>
 

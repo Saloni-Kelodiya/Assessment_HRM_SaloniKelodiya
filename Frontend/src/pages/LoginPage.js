@@ -65,7 +65,7 @@ const LoginPage = () => {
     return (
         <div className="container login-page-container"> 
             <Header />
-            <main className="login-main">
+            <main className="main-content">
                 <div className="login-box">
                     <h2>LOGIN</h2>
                     <p style={{textAlign: 'center', color: '#666', fontSize: '14px', marginBottom: '15px'}}>

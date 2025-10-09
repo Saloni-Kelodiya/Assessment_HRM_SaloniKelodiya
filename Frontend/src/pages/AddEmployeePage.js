@@ -121,7 +121,7 @@ const AddEmployeePage = () => {
   return (
     <div className="container">
       <Header />
-      <main className="add-employee-main">
+      <main className="main-content">
         <div className="add-employee-box">
           <h2>ADD EMPLOYEE</h2>
           <form className="add-employee-form" onSubmit={handleSubmit}>

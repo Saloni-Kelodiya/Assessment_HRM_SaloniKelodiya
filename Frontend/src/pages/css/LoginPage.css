@@ -1,18 +1,24 @@
-.login-main {
+.container.login-page-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-grow: 1;
-    padding: 30px 20px;
-    width: 100%;
-    box-sizing: border-box;
-    overflow-y: auto;
-    height: calc(100vh - 100px - 48px );
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+.login-main {
+    
+   flex: 1;
+
+  overflow-y: auto;   /* scrollable if content grows */
+  overflow-x: hidden;
+  padding: 20px;
+  box-sizing: border-box;
+  justify-content: center;
+  align-content: center;
 }
 
 .login-box {
     background: rgba(255, 255, 255, 0.2);
-    padding: 50px;
+    padding: 40px;
     border-radius: 15px;
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
     backdrop-filter: blur(8px);

@@ -56,7 +56,7 @@ const ApprovalPage = () => {
   return (
     <div className="container">
       <Header />
-      <main className="approval-main">
+      <main className="main-content">
         <div className="approval-content">
           <h2>Approval Requests</h2>
 

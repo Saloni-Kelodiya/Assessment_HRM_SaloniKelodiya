@@ -4,15 +4,15 @@
   display: flex;
   align-items: center;
   padding: 25px 40px;
-  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
   color: white;
   border-bottom: 4px solid #e74c3c;
-  position: fixed;
+  align-items: center;
+  padding: 20px 20px;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100% );
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
-  height: 100px; /* header height */
+  z-index: 1000;
+  
 }
 
 .header::before {

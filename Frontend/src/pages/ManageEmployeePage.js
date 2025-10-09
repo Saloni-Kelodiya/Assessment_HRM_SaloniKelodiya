@@ -94,7 +94,7 @@ useEffect(() => {
   return (
     <div className="container">
       <Header />
-      <main className="manage-employee-main">
+      <main className="main-content">
         <div className="manage-employee-box">
           <h2>MANAGE EMPLOYEE</h2>
 
