@@ -1,0 +1,52 @@
+/* HomePage.css */
+
+/* Container for entire layout */
+.container {
+   display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+/* HomePage.css */
+
+/* ===== Main content should expand between header and footer ===== */
+.main-content {
+  flex: 1; /* Fill available space between header and footer */
+  overflow-y: auto; /* Scroll vertically if content overflows */
+  overflow-x: hidden; /* Prevent horizontal scroll */
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center content horizontally */
+  justify-content: flex-start;
+  gap: 20px; /* Space between elements */
+  margin-top: 10px;
+}
+
+/* ===== Responsive Breakpoints ===== */
+
+/* Tablets */
+@media (max-width: 992px) {
+  .main-content {
+    padding: 15px;
+    gap: 15px;
+  }
+}
+
+/* Mobile devices */
+@media (max-width: 600px) {
+  .main-content {
+    padding: 10px;
+    gap: 10px;
+  }
+}
+
+/* Very small devices */
+@media (max-width: 400px) {
+  .main-content {
+    padding: 5px;
+    gap: 8px;
+  }
+}

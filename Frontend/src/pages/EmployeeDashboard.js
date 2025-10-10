@@ -55,7 +55,7 @@ const EmployeeDashboard = () => {
   };
 
   return (
-    <div className="employee-dashboard-container">
+    <div className="container">
       <Header />
       <main className="main-content">
         <h2>👋 Welcome to Employee Dashboard</h2>

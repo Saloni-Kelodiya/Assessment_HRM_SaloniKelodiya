@@ -63,7 +63,7 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="container login-page-container"> 
+        <div className="container"> 
             <Header />
             <main className="main-content">
                 <div className="login-box">
